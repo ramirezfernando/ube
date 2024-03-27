@@ -34,21 +34,14 @@ func countLinesOfCode(folderPath string) (clocMap, error) {
         if err != nil {
             return err
         }
-        if info.IsDir() {
-            fmt.Printf("Skipping directory %q\n", path)
-            return nil
-        }
-        if !info.Type().IsRegular() {
-            fmt.Printf("Skipping non-regular file %q\n", path)
-            return nil
-        }
-
-        val, exists := language.Exts[filepath.Ext(path)]; if exists {
-            lines, err := countLinesOfFile(path)
-            if err != nil {
-                return err
+        if !info.IsDir() && info.Type().IsRegular() {
+            val, exists := language.Exts[filepath.Ext(path)]; if exists {
+                lines, err := countLinesOfFile(path)
+                if err != nil {
+                    return err
+                }
+                cloc[val] += lines
             }
-            cloc[val] += lines
         }
 
         return nil
