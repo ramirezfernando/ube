@@ -1,0 +1,26 @@
+package language
+
+var Exts = map[string]string{
+	".c":     "C",
+	".cpp":   "C++",
+	".java":  "Java",
+	".py":    "Python",
+	".js":    "JavaScript",
+	".ts":    "TypeScript",
+	".html":  "HTML",
+	".css":   "CSS",
+	".go":    "Go",
+	".rb":    "Ruby",
+	".php":   "PHP",
+	".swift": "Swift",
+	".kt":    "Kotlin",
+	".rs":    "Rust",
+	".pl":    "Perl",
+	".lua":   "Lua",
+	".sh":    "Shell",
+	".sql":   "SQL",
+	".json":  "JSON",
+	".xml":   "XML",
+	".yaml":  "YAML",
+	".md":    "Markdown",
+}
