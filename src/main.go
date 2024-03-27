@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+    "time"
 )
 
 type clocMap = map[string]int
@@ -17,7 +18,12 @@ func main() {
 		os.Exit(1)
 	}
 	folderPath := os.Args[1]
-	lines, err := countLinesOfCode(folderPath)
+
+    startTime := time.Now()
+	lines, fileCount, err := countLinesOfCode(folderPath)
+    endTime := time.Now()
+    executionTime := endTime.Sub(startTime)
+
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		os.Exit(1)
@@ -26,10 +32,14 @@ func main() {
 	for lang, li := range lines {
 		fmt.Printf("Total lines of code for %q: %d\n", lang, li)
 	}
+    fmt.Printf("Total files read: %d\n", fileCount)
+    fmt.Printf("Executed in %v\n", executionTime)
+
 }
 
-func countLinesOfCode(folderPath string) (clocMap, error) {
+func countLinesOfCode(folderPath string) (clocMap, int, error) {
 	cloc := make(clocMap)
+    var fc = 0
 	err := filepath.WalkDir(folderPath, func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -42,15 +52,16 @@ func countLinesOfCode(folderPath string) (clocMap, error) {
 					return err
 				}
 				cloc[val] += lines
+                fc += 1
 			}
 		}
 
 		return nil
 	})
 	if err != nil {
-		return cloc, err
+		return cloc, fc, err
 	}
-	return cloc, nil
+	return cloc, fc, nil
 }
 
 func countLinesOfFile(filename string) (int, error) {
