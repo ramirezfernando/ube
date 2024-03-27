@@ -45,8 +45,7 @@ func countLinesOfCode(folderPath string) (clocMap, int, error) {
 			return err
 		}
 		if !info.IsDir() && info.Type().IsRegular() {
-			val, exists := language.Exts[filepath.Ext(path)]
-			if exists {
+			if val, exists := language.Exts[filepath.Ext(path)]; exists {
 				lines, err := countLinesOfFile(path)
 				if err != nil {
 					return err
