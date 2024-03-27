@@ -1,18 +1,12 @@
 package main
 
-/*
-Idea for this tool:
-1. run "cloc ."
-2. count lines of code within each file of
-3. display cloc info using bubble tea and bubbles
-*/
-
 import (
-    "fmt"
-    "os"
-    "path/filepath"
-    "strings"
-    "cloc-tool/src/language"
+	"cloc-tool/src/language"
+	"fmt"
+	"io/fs"
+	"os"
+	"path/filepath"
+	"strings"
 )
 
 type clocMap = map[string]int
@@ -33,24 +27,30 @@ func main() {
         fmt.Printf("Total lines of code for %q: %d\n", lang, li)
     }
 }
-// I got Error: read ../../code-coogs/bot/node_modules/discord.js: is a directory, why?
-// I need to add a check for directories in countLinesOfFile
+
 func countLinesOfCode(folderPath string) (clocMap, error) {
     cloc := make(clocMap)
-    err := filepath.Walk(folderPath, func(path string, info os.FileInfo, err error) error {
+    err := filepath.WalkDir(folderPath, func(path string, info fs.DirEntry, err error) error {
         if err != nil {
             return err
         }
-        if !info.IsDir() {
-            val, exists := language.Exts[filepath.Ext(path)]
-            if exists {
-                lines, err := countLinesOfFile(path)
-                if err != nil {
-                    return err
-                }
-                cloc[val] += lines
-            }
+        if info.IsDir() {
+            fmt.Printf("Skipping directory %q\n", path)
+            return nil
         }
+        if !info.Type().IsRegular() {
+            fmt.Printf("Skipping non-regular file %q\n", path)
+            return nil
+        }
+
+        val, exists := language.Exts[filepath.Ext(path)]; if exists {
+            lines, err := countLinesOfFile(path)
+            if err != nil {
+                return err
+            }
+            cloc[val] += lines
+        }
+
         return nil
     })
     if err != nil {
