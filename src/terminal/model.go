@@ -3,9 +3,12 @@ package terminal
 import (
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/table"
+	"github.com/charmbracelet/bubbles/stopwatch"
 )
 
 type Model struct {
-	Table table.Model
-	Help  help.Model
+	ExecutionTime     stopwatch.Model
+    IsRunning         bool
+    Table             table.Model
+    Help              help.Model
 }

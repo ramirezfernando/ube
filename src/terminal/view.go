@@ -40,6 +40,12 @@ var baseStyle = lipgloss.NewStyle().
 	BorderForeground(lipgloss.Color("240"))
 
 func (m Model) View() string {
-	helpView := m.Help.View(keys)
-	return baseStyle.Render(m.Table.View()) + "\n" + helpView
+	out := m.ExecutionTime.View()
+
+    if m.IsRunning {
+		out += "\n" + baseStyle.Render(m.Table.View())
+        out += "\n" + m.Help.View(keys)
+    }
+
+    return out
 }
