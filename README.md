@@ -8,3 +8,7 @@ A command line tool to count lines of code (CLOC), written in Go.
 ## Features
 - cloc-tool has huge range of languages, supporting over **220** languages extensions.
 - cloc-tool is **accurate**, it currently reads comments, code, and whitespace in between.
+
+## What's next?
+- Add unit tests to double check the accuracy
+- Making your command available to Homebrew users
