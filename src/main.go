@@ -4,16 +4,15 @@ import (
 	"cloc-tool/src/language"
 	"cloc-tool/src/terminal"
 	"fmt"
-	"github.com/charmbracelet/bubbles/table"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
-	"time"
+	"github.com/charmbracelet/bubbles/table"
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
 type clocMap = map[string]int
@@ -26,10 +25,7 @@ func main() {
 
 	folderPath := os.Args[1]
 
-	st := time.Now()
-	lines, fc, err := countLinesOfCode(folderPath)
-	et := time.Now()
-	ext := et.Sub(st)
+	lines, err := countLinesOfCode(folderPath)
 
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
@@ -58,26 +54,26 @@ func main() {
 		table.WithHeight(7),
 	)
 
-	s := table.DefaultStyles()
-	s.Header = s.Header.
-		BorderStyle(lipgloss.NormalBorder()).
-		BorderForeground(lipgloss.Color("240")).
-		BorderBottom(true).
-		Bold(false)
-	s.Selected = s.Selected.
-		Foreground(lipgloss.Color("229")).
-		Background(lipgloss.Color("57")).
-		Bold(false)
-	t.SetStyles(s)
+    s := table.DefaultStyles()
+    s.Header = s.Header.
+        BorderStyle(lipgloss.NormalBorder()).
+        BorderForeground(lipgloss.Color("240")).
+        BorderBottom(true).
+        Bold(false)
+    s.Selected = s.Selected.
+        Foreground(lipgloss.Color("229")).
+        Background(lipgloss.Color("57")).
+        Bold(false)
+    t.SetStyles(s)
 
-	m := terminal.Model{Table: t, FilesRead: fc, ExecutionTime: ext}
-	if _, err := tea.NewProgram(m).Run(); err != nil {
-		fmt.Println("Error running program:", err)
-		os.Exit(1)
-	}
+    m := terminal.Model{Table: t}
+    if _, err := tea.NewProgram(m).Run(); err != nil {
+        fmt.Println("Error running program:", err)
+        os.Exit(1)
+    }
 }
 
-func countLinesOfCode(folderPath string) (clocMap, int, error) {
+func countLinesOfCode(folderPath string) (clocMap, error) {
 	cloc := make(clocMap)
 	var fc = 0
 	err := filepath.WalkDir(folderPath, func(path string, info fs.DirEntry, err error) error {
@@ -98,9 +94,9 @@ func countLinesOfCode(folderPath string) (clocMap, int, error) {
 		return nil
 	})
 	if err != nil {
-		return cloc, fc, err
+		return cloc, err
 	}
-	return cloc, fc, nil
+	return cloc, nil
 }
 
 func countLinesOfFile(filename string) (int, error) {
