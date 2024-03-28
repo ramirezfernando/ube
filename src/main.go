@@ -10,6 +10,8 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+
+	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -54,23 +56,23 @@ func main() {
 		table.WithHeight(7),
 	)
 
-    s := table.DefaultStyles()
-    s.Header = s.Header.
-        BorderStyle(lipgloss.NormalBorder()).
-        BorderForeground(lipgloss.Color("240")).
-        BorderBottom(true).
-        Bold(false)
-    s.Selected = s.Selected.
-        Foreground(lipgloss.Color("229")).
-        Background(lipgloss.Color("57")).
-        Bold(false)
-    t.SetStyles(s)
+	s := table.DefaultStyles()
+	s.Header = s.Header.
+		BorderStyle(lipgloss.NormalBorder()).
+		BorderForeground(lipgloss.Color("240")).
+		BorderBottom(true).
+		Bold(false)
+	s.Selected = s.Selected.
+		Foreground(lipgloss.Color("229")).
+		Background(lipgloss.Color("#5433ff")).
+		Bold(false)
+	t.SetStyles(s)
 
-    m := terminal.Model{Table: t}
-    if _, err := tea.NewProgram(m).Run(); err != nil {
-        fmt.Println("Error running program:", err)
-        os.Exit(1)
-    }
+	m := terminal.Model{Table: t, Help: help.New()}
+	if _, err := tea.NewProgram(m).Run(); err != nil {
+		fmt.Println("Error running program:", err)
+		os.Exit(1)
+	}
 }
 
 func countLinesOfCode(folderPath string) (clocMap, error) {
