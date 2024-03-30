@@ -20,7 +20,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-type clocMap = map[string]int
+type clocMap = map[string]int // ex: { "Python": 100, "Go": 200 }
 
 func main() {
 	if len(os.Args) < 2 {
@@ -67,7 +67,7 @@ func countLinesOfCode(folderPath string) (clocMap, error) {
 				if err != nil {
 					return err
 				}
-                cloc[val] += lines
+				cloc[val] += lines
 			}
 		}
 
@@ -79,24 +79,22 @@ func countLinesOfCode(folderPath string) (clocMap, error) {
 	return cloc, nil
 }
 
-func countLines(r io.Reader) int {
-	count, err := CountLines(r)
+// Counts the number of '\n' characters in the reader
+func countLinesOfFile(filename string) (int, error) {
+	file, err := os.OpenFile(filename, os.O_RDONLY, 0444)
 	if err != nil {
-		fmt.Println("Error running program:", err)
+		return 0, err
 	}
-    return count
-}
+	defer file.Close()
 
-func CountLines(r io.Reader) (int, error) {
 	var count int
 	var read int
-	var err error
 	var target []byte = []byte("\n")
 
 	buffer := make([]byte, 32*1024)
 
 	for {
-		read, err = r.Read(buffer)
+		read, err = file.Read(buffer)
 		if err != nil {
 			break
 		}
@@ -111,15 +109,6 @@ func CountLines(r io.Reader) (int, error) {
 	return count, err
 }
 
-func countLinesOfFile(filename string) (int, error) {
-	file, err := os.OpenFile(filename, os.O_RDONLY, 0444)
-	if err != nil {
-		return 0, err
-	}
-    defer file.Close()
-    return countLines(file), err
-}
-
 func generateTable(lines clocMap) table.Model {
 	columns := []table.Column{
 		{Title: "Language", Width: 15},
@@ -127,10 +116,10 @@ func generateTable(lines clocMap) table.Model {
 	}
 
 	rows := []table.Row{}
-    total := 0
+	total := 0
 	for lang, li := range lines {
 		rows = append(rows, table.Row{lang, strconv.Itoa(li)})
-        total += li
+		total += li
 	}
 	sort.Slice(rows, func(i, j int) bool {
 		li1, _ := strconv.Atoi(rows[i][1])
@@ -138,8 +127,8 @@ func generateTable(lines clocMap) table.Model {
 		return li1 > li2
 	})
 
-    totalRow := table.Row{"Total", strconv.Itoa(total)}
-    rows = append(rows, totalRow)
+	rows = append(rows, table.Row{"", ""})    
+	rows = append(rows, table.Row{"Total", strconv.Itoa(total)})
 
 	t := table.New(
 		table.WithColumns(columns),
