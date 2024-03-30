@@ -1,15 +1,16 @@
 package main
 
 import (
+	"bytes"
 	"cloc-tool/src/language"
 	"cloc-tool/src/terminal"
 	"fmt"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"sort"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/charmbracelet/bubbles/help"
@@ -66,7 +67,7 @@ func countLinesOfCode(folderPath string) (clocMap, error) {
 				if err != nil {
 					return err
 				}
-				cloc[val] += lines
+                cloc[val] += lines
 			}
 		}
 
@@ -78,13 +79,45 @@ func countLinesOfCode(folderPath string) (clocMap, error) {
 	return cloc, nil
 }
 
+func countLines(r io.Reader) int {
+	count, err := CountLines(r)
+	if err != nil {
+		fmt.Println("Error running program:", err)
+	}
+    return count
+}
+
+func CountLines(r io.Reader) (int, error) {
+	var count int
+	var read int
+	var err error
+	var target []byte = []byte("\n")
+
+	buffer := make([]byte, 32*1024)
+
+	for {
+		read, err = r.Read(buffer)
+		if err != nil {
+			break
+		}
+
+		count += bytes.Count(buffer[:read], target)
+	}
+
+	if err == io.EOF {
+		return count, nil
+	}
+
+	return count, err
+}
+
 func countLinesOfFile(filename string) (int, error) {
-	content, err := os.ReadFile(filename)
+	file, err := os.OpenFile(filename, os.O_RDONLY, 0444)
 	if err != nil {
 		return 0, err
 	}
-	lines := strings.Split(string(content), "\n")
-	return len(lines), nil
+    defer file.Close()
+    return countLines(file), err
 }
 
 func generateTable(lines clocMap) table.Model {
