@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-    "github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/stopwatch"
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
@@ -29,29 +29,29 @@ func main() {
 
 	folderPath := os.Args[1]
 
-    m := terminal.Model{ExecutionTime: stopwatch.NewWithInterval(time.Millisecond), IsRunning: true}
-    p := tea.NewProgram(m)
+	m := terminal.Model{ExecutionTime: stopwatch.NewWithInterval(time.Millisecond), IsRunning: true}
+	p := tea.NewProgram(m)
 
-    go func() {
-        msg := getMessage(folderPath)
-        p.Send(msg)
-    }()
+	go func() {
+		msg := getMessage(folderPath)
+		p.Send(msg)
+	}()
 
-    if _, err := p.Run(); err != nil {
+	if _, err := p.Run(); err != nil {
 		fmt.Println("Error running program:", err)
 		os.Exit(1)
 	}
 }
 
 func getMessage(folderPath string) tea.Msg {
-    lines, err := countLinesOfCode(folderPath)
-    if err != nil {
-        return terminal.ClocCompleted{Err: err}
-    }
+	lines, err := countLinesOfCode(folderPath)
+	if err != nil {
+		return terminal.ClocCompleted{Err: err}
+	}
 
-    t := generateTable(lines)
-    h := help.New()
-    return terminal.ClocCompleted{Table: t, Help: h}
+	t := generateTable(lines)
+	h := help.New()
+	return terminal.ClocCompleted{Table: t, Help: h}
 }
 
 func countLinesOfCode(folderPath string) (clocMap, error) {
@@ -90,7 +90,7 @@ func countLinesOfFile(filename string) (int, error) {
 }
 
 func generateTable(lines clocMap) table.Model {
-    columns := []table.Column{
+	columns := []table.Column{
 		{Title: "Language", Width: 15},
 		{Title: "Lines of Code", Width: 15},
 	}
@@ -124,5 +124,5 @@ func generateTable(lines clocMap) table.Model {
 		Bold(false)
 	t.SetStyles(s)
 
-    return t
+	return t
 }

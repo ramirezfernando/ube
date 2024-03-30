@@ -1,15 +1,15 @@
 package terminal
 
 import (
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/bubbles/table"
 	"github.com/charmbracelet/bubbles/help"
+	"github.com/charmbracelet/bubbles/table"
+	tea "github.com/charmbracelet/bubbletea"
 )
 
 type ClocCompleted struct {
-    Table table.Model
-    Help  help.Model
-    Err   error
+	Table table.Model
+	Help  help.Model
+	Err   error
 }
 
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {

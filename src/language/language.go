@@ -68,7 +68,7 @@ var Exts = map[string]string{
 	".fish":        "Fish",
 	".fr":          "Frege",
 	".fst":         "F*",
-	".fsx":          "F#",
+	".fsx":         "F#",
 	".GLSL":        "GLSL",
 	".vs":          "GLSL",
 	".shader":      "HLSL",
