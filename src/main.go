@@ -96,14 +96,19 @@ func generateTable(lines clocMap) table.Model {
 	}
 
 	rows := []table.Row{}
+    total := 0
 	for lang, li := range lines {
 		rows = append(rows, table.Row{lang, strconv.Itoa(li)})
+        total += li
 	}
 	sort.Slice(rows, func(i, j int) bool {
 		li1, _ := strconv.Atoi(rows[i][1])
 		li2, _ := strconv.Atoi(rows[j][1])
 		return li1 > li2
 	})
+
+    totalRow := table.Row{"Total", strconv.Itoa(total)}
+    rows = append(rows, totalRow)
 
 	t := table.New(
 		table.WithColumns(columns),
