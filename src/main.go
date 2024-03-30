@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/charmbracelet/bubbles/help"
+    "github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/stopwatch"
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
@@ -29,19 +29,29 @@ func main() {
 
 	folderPath := os.Args[1]
 
-	lines, err := countLinesOfCode(folderPath)
-	if err != nil {
-		fmt.Printf("Error: %v\n", err)
-		os.Exit(1)
-	}
+    m := terminal.Model{ExecutionTime: stopwatch.NewWithInterval(time.Millisecond), IsRunning: true}
+    p := tea.NewProgram(m)
 
-    t := generateTable(lines)
+    go func() {
+        msg := getMessage(folderPath)
+        p.Send(msg)
+    }()
 
-	m := terminal.Model{ExecutionTime: stopwatch.NewWithInterval(time.Millisecond), IsRunning: true, Table: t, Help: help.New()}
-	if _, err := tea.NewProgram(m).Run(); err != nil {
+    if _, err := p.Run(); err != nil {
 		fmt.Println("Error running program:", err)
 		os.Exit(1)
 	}
+}
+
+func getMessage(folderPath string) tea.Msg {
+    lines, err := countLinesOfCode(folderPath)
+    if err != nil {
+        return terminal.ClocCompleted{Err: err}
+    }
+
+    t := generateTable(lines)
+    h := help.New()
+    return terminal.ClocCompleted{Table: t, Help: h}
 }
 
 func countLinesOfCode(folderPath string) (clocMap, error) {

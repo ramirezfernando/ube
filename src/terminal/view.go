@@ -41,11 +41,11 @@ var baseStyle = lipgloss.NewStyle().
 
 func (m Model) View() string {
 	out := m.ExecutionTime.View()
-
-    if m.IsRunning {
+	
+    if !m.IsRunning {
 		out += "\n" + baseStyle.Render(m.Table.View())
         out += "\n" + m.Help.View(keys)
     }
-
+	
     return out
 }
