@@ -56,7 +56,6 @@ func getMessage(folderPath string) tea.Msg {
 
 func countLinesOfCode(folderPath string) (clocMap, error) {
 	cloc := make(clocMap)
-	var fc = 0
 	err := filepath.WalkDir(folderPath, func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
@@ -68,7 +67,6 @@ func countLinesOfCode(folderPath string) (clocMap, error) {
 					return err
 				}
 				cloc[val] += lines
-				fc += 1
 			}
 		}
 
