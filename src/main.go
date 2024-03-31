@@ -47,6 +47,7 @@ func main() {
 func getMessage(folderPath string) tea.Msg {
 	lines, err := countLinesOfCode(folderPath)
 	if err != nil {
+		fmt.Println("Error running program:", err)
 		return terminal.ClocCompleted{Err: err}
 	}
 
@@ -79,7 +80,7 @@ func countLinesOfCode(folderPath string) (clocMap, error) {
 	return cloc, nil
 }
 
-// Counts the number of '\n' characters in the reader
+// Counts the number of '\n' characters in a file
 func countLinesOfFile(filename string) (int, error) {
 	file, err := os.OpenFile(filename, os.O_RDONLY, 0444)
 	if err != nil {
