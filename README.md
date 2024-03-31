@@ -3,7 +3,7 @@
 A command line tool to count lines of code (CLOC), written in Go.
 
 ## Example
-<img width="505" alt="Screen Shot 2024-03-31 at 1 25 03 AM" src="https://github.com/ramirezfernando/cloc-tool/assets/91701930/a667ac6b-9a37-4a7f-b901-84c25edeed44">
+<img width="508" alt="Screen Shot 2024-03-31 at 1 26 14 AM" src="https://github.com/ramirezfernando/cloc-tool/assets/91701930/4b188369-39d9-48b0-8fed-0d414b067e75">
 
 ## Features
 - cloc-tool has a huge range of languages, supporting over **220** language extensions.
