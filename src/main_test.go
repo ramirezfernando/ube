@@ -3,6 +3,8 @@ package main
 import (
 	"reflect"
 	"testing"
+	"github.com/charmbracelet/bubbles/table"
+	"github.com/charmbracelet/lipgloss"
 )
 
 func TestCountLinesOfCode(t *testing.T) {
@@ -44,5 +46,52 @@ func TestCountLinesOfFile(t *testing.T) {
 		if lines != tt.expectedLines {
 			t.Errorf("Expected %d lines, but got %d", tt.expectedLines, lines)
 		}
+	}
+}
+
+func TestGenerateTable(t *testing.T) {
+	lines := clocMap{
+		"Go":     100,
+		"Python": 200,
+		"Java":   150,
+	}
+
+	expectedColumns := []table.Column{
+		{Title: "Language", Width: 15},
+		{Title: "Lines of Code", Width: 15},
+	}
+
+	expectedRows := []table.Row{
+		{"Python", "200"},
+		{"Java", "150"},
+		{"Go", "100"},
+		{"", ""},
+		{"Total", "450"},
+	}
+
+	expectedTable := table.New(
+		table.WithColumns(expectedColumns),
+		table.WithRows(expectedRows),
+		table.WithFocused(true),
+		table.WithHeight(7),
+	)
+
+	// lipgloss style
+	s := table.DefaultStyles()
+	s.Header = s.Header.
+		BorderStyle(lipgloss.NormalBorder()).
+		BorderForeground(lipgloss.Color("240")).
+		BorderBottom(true).
+		Bold(false)
+	s.Selected = s.Selected.
+		Foreground(lipgloss.Color("229")).
+		Background(lipgloss.Color("#5433ff")).
+		Bold(false)
+	expectedTable.SetStyles(s)
+
+	actualTable := generateTable(lines)
+
+	if !reflect.DeepEqual(expectedTable, actualTable) {
+		t.Errorf("Expected %v, but got %v", expectedTable, actualTable)
 	}
 }
