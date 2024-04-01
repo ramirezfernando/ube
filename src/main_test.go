@@ -1,15 +1,35 @@
 package main
 
 import (
+	"reflect"
 	"testing"
 )
 
-// TODO: Add TestCountLinesOfCode function
+func TestCountLinesOfCode(t *testing.T) {
+
+	tests := []struct {
+		filePath        string
+		expectedClocMap clocMap
+	}{
+		{"../tests/data/hello.go", clocMap{"Go": 4}},
+		{"../tests/data/stack.ml", clocMap{"OCaml": 28}},
+	}
+
+	for _, tt := range tests {
+		clocMap, err := countLinesOfCode(tt.filePath)
+		if err != nil {
+			t.Errorf("Error: %v", err)
+		}
+		if !reflect.DeepEqual(clocMap, tt.expectedClocMap) {
+			t.Errorf("Expected %v, but got %v", tt.expectedClocMap, clocMap)
+		}
+	}
+}
 
 func TestCountLinesOfFile(t *testing.T) {
 
 	tests := []struct {
-		filePath    string
+		filePath      string
 		expectedLines int
 	}{
 		{"../tests/data/hello.go", 4},
