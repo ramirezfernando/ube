@@ -1,4 +1,5 @@
 # cloc-tool
+![Coverage](https://img.shields.io/badge/Coverage-77.9%25-brightgreen)
 
 A command line tool to count lines of code (CLOC), built with [Go](https://go.dev/) & [Bubbletea](https://github.com/charmbracelet/bubbletea).
 
