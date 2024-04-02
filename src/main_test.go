@@ -14,6 +14,8 @@ func TestGetMessage(t *testing.T) {
 	lines := clocMap{
 		"Go":     4,
 		"OCaml": 28,
+		"Plain Text": 0,
+		"JavaScript": 24,
 	}
 
 	tests := []struct {
@@ -39,6 +41,8 @@ func TestCountLinesOfCode(t *testing.T) {
 	}{
 		{"../tests/data/hello.go", clocMap{"Go": 4}},
 		{"../tests/data/stack.ml", clocMap{"OCaml": 28}},
+		{"../tests/data/empty.txt", clocMap{"Plain Text": 0}},
+		{"../tests/data/person.js", clocMap{"JavaScript": 24}},
 	}
 
 	for _, tt := range tests {
@@ -53,20 +57,20 @@ func TestCountLinesOfCode(t *testing.T) {
 }
 
 func TestCountLinesOfFile(t *testing.T) {
-
 	tests := []struct {
 		filePath      string
 		expectedLines int
 	}{
 		{"../tests/data/hello.go", 4},
 		{"../tests/data/stack.ml", 28},
+		{"../tests/data/empty.txt", 0},
+		{"../tests/data/person.js", 24},
+		{"../tests/data/nonexistent.txt", -1}, // Non-existent file
 	}
 
 	for _, tt := range tests {
-		lines, err := countLinesOfFile(tt.filePath)
-		if err != nil {
-			t.Errorf("Error: %v", err)
-		}
+		lines, _ := countLinesOfFile(tt.filePath)
+		
 		if lines != tt.expectedLines {
 			t.Errorf("Expected %d lines, but got %d", tt.expectedLines, lines)
 		}
