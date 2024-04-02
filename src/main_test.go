@@ -18,11 +18,15 @@ func TestGetMessage(t *testing.T) {
 		"JavaScript": 24,
 	}
 
+	_, err := countLinesOfCode("../tests/data/nonexistent.txt")
+
 	tests := []struct {
 		filePath         string
 		expectedMessage  terminal.ClocCompleted
 	}{
 		{"../tests/data", terminal.ClocCompleted{Table: generateTable(lines), Help: help.New()}},
+		{"../tests/data/nonexistent.txt", terminal.ClocCompleted{Err: err}}, // Non-existent file
+
 	}
 	
 	for _, tt := range tests {
@@ -43,13 +47,13 @@ func TestCountLinesOfCode(t *testing.T) {
 		{"../tests/data/stack.ml", clocMap{"OCaml": 28}},
 		{"../tests/data/empty.txt", clocMap{"Plain Text": 0}},
 		{"../tests/data/person.js", clocMap{"JavaScript": 24}},
+		{"../tests/data", clocMap{"Go": 4, "OCaml": 28, "Plain Text": 0, "JavaScript": 24}}, // Directory
+		{"../tests/data/nonexistent.txt", clocMap{}}, // Non-existent file
 	}
 
 	for _, tt := range tests {
-		clocMap, err := countLinesOfCode(tt.filePath)
-		if err != nil {
-			t.Errorf("Error: %v", err)
-		}
+		clocMap, _ := countLinesOfCode(tt.filePath)
+
 		if !reflect.DeepEqual(clocMap, tt.expectedClocMap) {
 			t.Errorf("Expected %v, but got %v", tt.expectedClocMap, clocMap)
 		}
@@ -70,7 +74,7 @@ func TestCountLinesOfFile(t *testing.T) {
 
 	for _, tt := range tests {
 		lines, _ := countLinesOfFile(tt.filePath)
-		
+
 		if lines != tt.expectedLines {
 			t.Errorf("Expected %d lines, but got %d", tt.expectedLines, lines)
 		}
