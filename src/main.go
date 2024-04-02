@@ -84,7 +84,7 @@ func countLinesOfCode(folderPath string) (clocMap, error) {
 func countLinesOfFile(filename string) (int, error) {
 	file, err := os.OpenFile(filename, os.O_RDONLY, 0444)
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
 	defer file.Close()
 
