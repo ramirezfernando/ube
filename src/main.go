@@ -42,6 +42,8 @@ func main() {
 		fmt.Println("Error running program:", err)
 		os.Exit(1)
 	}
+
+	os.Exit(0)
 }
 
 func getMessage(folderPath string) tea.Msg {
