@@ -1,11 +1,35 @@
 package main
 
 import (
+	"cloc-tool/src/terminal"
 	"reflect"
 	"testing"
+
+	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/table"
 	"github.com/charmbracelet/lipgloss"
 )
+
+func TestGetMessage(t *testing.T) {
+	lines := clocMap{
+		"Go":     4,
+		"OCaml": 28,
+	}
+
+	tests := []struct {
+		filePath         string
+		expectedMessage  terminal.ClocCompleted
+	}{
+		{"../tests/data", terminal.ClocCompleted{Table: generateTable(lines), Help: help.New()}},
+	}
+	
+	for _, tt := range tests {
+		message := getMessage(tt.filePath)
+		if !reflect.DeepEqual(message, tt.expectedMessage) {
+			t.Errorf("Expected %v, but got %v", tt.expectedMessage, message)
+		}
+	}
+}
 
 func TestCountLinesOfCode(t *testing.T) {
 
