@@ -20,7 +20,9 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-type clocMap = map[string]int // ex: { "Python": 100, "Go": 200 }
+// LanguageLineCount is a map of programming languages to line count
+// Example: { "Python": 100, "Go": 200 }
+type LanguageLineCount = map[string]int
 
 func main() {
 	if len(os.Args) < 2 {
@@ -28,13 +30,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	folderPath := os.Args[1]
+	path := os.Args[1]
 
 	m := terminal.Model{ExecutionTime: stopwatch.NewWithInterval(time.Millisecond), IsRunning: true}
 	p := tea.NewProgram(m)
 
 	go func() {
-		msg := getMessage(folderPath)
+		msg := getMessage(path)
 		p.Send(msg)
 	}()
 
@@ -46,45 +48,45 @@ func main() {
 	os.Exit(0)
 }
 
-func getMessage(folderPath string) tea.Msg {
-	lines, err := countLinesOfCode(folderPath)
+func getMessage(path string) tea.Msg {
+	llc, err := countLinesOfCode(path)
 	if err != nil {
 		fmt.Println("Error running program:", err)
 		return terminal.ClocCompleted{Err: err}
 	}
 
-	t := generateTable(lines)
+	t := generateTable(llc)
 	h := help.New()
 	return terminal.ClocCompleted{Table: t, Help: h}
 }
 
-func countLinesOfCode(folderPath string) (clocMap, error) {
-	cloc := make(clocMap)
-	err := filepath.WalkDir(folderPath, func(path string, info fs.DirEntry, err error) error {
+func countLinesOfCode(path string) (LanguageLineCount, error) {
+	llc := make(LanguageLineCount)
+	err := filepath.WalkDir(path, func(path string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 		if !info.IsDir() && info.Type().IsRegular() {
-			if val, exists := language.Exts[filepath.Ext(path)]; exists {
+			if language, exists := language.Exts[filepath.Ext(path)]; exists {
 				lines, err := countLinesOfFile(path)
 				if err != nil {
 					return err
 				}
-				cloc[val] += lines
+				llc[language] += lines
 			}
 		}
 
 		return nil
 	})
 	if err != nil {
-		return cloc, err
+		return llc, err
 	}
-	return cloc, nil
+	return llc, nil
 }
 
 // Counts the number of '\n' characters in a file
-func countLinesOfFile(filename string) (int, error) {
-	file, err := os.OpenFile(filename, os.O_RDONLY, 0444)
+func countLinesOfFile(filePath string) (int, error) {
+	file, err := os.OpenFile(filePath, os.O_RDONLY, 0444)
 	if err != nil {
 		return -1, err
 	}
@@ -112,7 +114,7 @@ func countLinesOfFile(filename string) (int, error) {
 	return count, err
 }
 
-func generateTable(lines clocMap) table.Model {
+func generateTable(llc LanguageLineCount) table.Model {
 	columns := []table.Column{
 		{Title: "Language", Width: 15},
 		{Title: "Lines of Code", Width: 15},
@@ -120,9 +122,9 @@ func generateTable(lines clocMap) table.Model {
 
 	rows := []table.Row{}
 	total := 0
-	for lang, li := range lines {
-		rows = append(rows, table.Row{lang, strconv.Itoa(li)})
-		total += li
+	for language, lineCount := range llc {
+		rows = append(rows, table.Row{language, strconv.Itoa(lineCount)})
+		total += lineCount
 	}
 	sort.Slice(rows, func(i, j int) bool {
 		li1, _ := strconv.Atoi(rows[i][1])
@@ -130,7 +132,7 @@ func generateTable(lines clocMap) table.Model {
 		return li1 > li2
 	})
 
-	rows = append(rows, table.Row{"", ""})    
+	rows = append(rows, table.Row{"", ""})
 	rows = append(rows, table.Row{"Total", strconv.Itoa(total)})
 
 	t := table.New(

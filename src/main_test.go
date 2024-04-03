@@ -11,9 +11,9 @@ import (
 )
 
 func TestGetMessage(t *testing.T) {
-	lines := clocMap{
-		"Go":     4,
-		"OCaml": 28,
+	llc := LanguageLineCount{
+		"Go":         4,
+		"OCaml":      28,
 		"Plain Text": 0,
 		"JavaScript": 24,
 	}
@@ -21,16 +21,16 @@ func TestGetMessage(t *testing.T) {
 	_, err := countLinesOfCode("../tests/data/nonexistent.txt")
 
 	tests := []struct {
-		filePath         string
-		expectedMessage  terminal.ClocCompleted
+		path            string
+		expectedMessage terminal.ClocCompleted
 	}{
-		{"../tests/data", terminal.ClocCompleted{Table: generateTable(lines), Help: help.New()}},
+		{"../tests/data", terminal.ClocCompleted{Table: generateTable(llc), Help: help.New()}},
 		{"../tests/data/nonexistent.txt", terminal.ClocCompleted{Err: err}}, // Non-existent file
 
 	}
-	
+
 	for _, tt := range tests {
-		message := getMessage(tt.filePath)
+		message := getMessage(tt.path)
 		if !reflect.DeepEqual(message, tt.expectedMessage) {
 			t.Errorf("Expected %v, but got %v", tt.expectedMessage, message)
 		}
@@ -40,19 +40,19 @@ func TestGetMessage(t *testing.T) {
 func TestCountLinesOfCode(t *testing.T) {
 
 	tests := []struct {
-		filePath        string
-		expectedClocMap clocMap
+		path            string
+		expectedClocMap LanguageLineCount
 	}{
-		{"../tests/data/hello.go", clocMap{"Go": 4}},
-		{"../tests/data/stack.ml", clocMap{"OCaml": 28}},
-		{"../tests/data/empty.txt", clocMap{"Plain Text": 0}},
-		{"../tests/data/person.js", clocMap{"JavaScript": 24}},
-		{"../tests/data", clocMap{"Go": 4, "OCaml": 28, "Plain Text": 0, "JavaScript": 24}}, // Directory
-		{"../tests/data/nonexistent.txt", clocMap{}}, // Non-existent file
+		{"../tests/data/hello.go", LanguageLineCount{"Go": 4}},
+		{"../tests/data/stack.ml", LanguageLineCount{"OCaml": 28}},
+		{"../tests/data/empty.txt", LanguageLineCount{"Plain Text": 0}},
+		{"../tests/data/person.js", LanguageLineCount{"JavaScript": 24}},
+		{"../tests/data", LanguageLineCount{"Go": 4, "OCaml": 28, "Plain Text": 0, "JavaScript": 24}}, // Directory
+		{"../tests/data/nonexistent.txt", LanguageLineCount{}},                                        // Non-existent file
 	}
 
 	for _, tt := range tests {
-		clocMap, _ := countLinesOfCode(tt.filePath)
+		clocMap, _ := countLinesOfCode(tt.path)
 
 		if !reflect.DeepEqual(clocMap, tt.expectedClocMap) {
 			t.Errorf("Expected %v, but got %v", tt.expectedClocMap, clocMap)
@@ -62,7 +62,7 @@ func TestCountLinesOfCode(t *testing.T) {
 
 func TestCountLinesOfFile(t *testing.T) {
 	tests := []struct {
-		filePath      string
+		path          string
 		expectedLines int
 	}{
 		{"../tests/data/hello.go", 4},
@@ -73,7 +73,7 @@ func TestCountLinesOfFile(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		lines, _ := countLinesOfFile(tt.filePath)
+		lines, _ := countLinesOfFile(tt.path)
 
 		if lines != tt.expectedLines {
 			t.Errorf("Expected %d lines, but got %d", tt.expectedLines, lines)
@@ -82,7 +82,7 @@ func TestCountLinesOfFile(t *testing.T) {
 }
 
 func TestGenerateTable(t *testing.T) {
-	lines := clocMap{
+	llc := LanguageLineCount{
 		"Go":     100,
 		"Python": 200,
 		"Java":   150,
@@ -108,7 +108,6 @@ func TestGenerateTable(t *testing.T) {
 		table.WithHeight(7),
 	)
 
-	// lipgloss style
 	s := table.DefaultStyles()
 	s.Header = s.Header.
 		BorderStyle(lipgloss.NormalBorder()).
@@ -121,7 +120,7 @@ func TestGenerateTable(t *testing.T) {
 		Bold(false)
 	expectedTable.SetStyles(s)
 
-	actualTable := generateTable(lines)
+	actualTable := generateTable(llc)
 
 	if !reflect.DeepEqual(expectedTable, actualTable) {
 		t.Errorf("Expected %v, but got %v", expectedTable, actualTable)
