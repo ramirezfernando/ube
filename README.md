@@ -13,11 +13,65 @@ A command line tool to count lines of code (CLOC), built with [Go](https://go.de
 
 ## Installation
 
-TBA
+### macOS
+
+1. Download the appropriate release archive for your platform from the [Releases](https://github.com/ramirezfernando/cloc-tool/releases/tag/v1.0.1) page:
+   - For Intel-based Macs: [cloc-tool_1.0.1_darwin_amd64.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_darwin_amd64.tar.gz)
+   - For Apple Silicon Macs: [cloc-tool_1.0.1_darwin_arm64.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_darwin_arm64.tar.gz)
+
+2. Extract the archive from your downloads folder using the following command in your terminal:
+    ```bash
+    $ tar -xzf ~/Downloads/cloc-tool_1.0.1_darwin_amd64.tar.gz # or cloc-tool_1.0.1_darwin_arm64.tar.gz
+    ```
+3. Move the extracted binary to a directory in your PATH for convenient access from any directory:
+    ```bash
+    $ mv cloc-tool /usr/local/bin/cloc
+    ```
+4. Verify the installation (might have to allow in settings):
+    ```
+    $ cloc
+    ```
+
+### Linux
+1. Download the appropriate release archive for your platform from the [Releases](https://github.com/ramirezfernando/cloc-tool/releases/tag/v1.0.1) page:
+    - For 32-bit systems: [cloc-tool_1.0.1_linux_386.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_linux_386.tar.gz)
+    - For 64-bit systems: [cloc-tool_1.0.1_linux_amd64.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_linux_amd64.tar.gz)
+    - For ARM 64-bit systems: [cloc-tool_1.0.1_linux_arm64.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_linux_arm64.tar.gz)
+2. Extract the archive from your downloads folder using the following command in your terminal:
+    ```bash
+    $ tar -xzf ~/Downloads/cloc-tool_1.0.1_linux_386.tar.gz
+    ```
+3. Move the extracted binary to a directory in your PATH for convenient access from any directory:
+    ```bash
+    $ sudo mv cloc-tool /usr/local/bin/cloc
+    ```
+4. Set the correct permissions for the binary:
+    ```bash
+    $ sudo chmod +x /usr/local/bin/cloc
+    ```
+5. Verify the installation:
+    ```bash
+    $ cloc
+    ```
+
+### Windows
+
+1. Download the appropriate release archive for your platform from the [Releases](https://github.com/ramirezfernando/cloc-tool/releases/tag/v1.0.1) page:
+    - For 32-bit systems: [cloc-tool_1.0.1_windows_386.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_windows_386.tar.gz)
+    - For 64-bit systems: [cloc-tool_1.0.1_windows_amd64.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_windows_amd64.tar.gz)
+    - For ARM 64-bit systems: [cloc-tool_1.0.1_windows_arm64.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_windows_arm64.tar.gz)
+2. Extract the archive from your downloads folder using a tool like 7-Zip or WinRAR.
+3. Move the extracted binary (cloc-tool.exe) to a directory included in your system's PATH environment variable for convenient access, and rename it to cloc.exe. Alternatively, you can run the tool from its extracted location.
+4. Verify the installation:
+    ```
+    $ cloc
+    ```
 
 ## Usage
 
-TBA
+```bash
+$ cloc ./your/path
+```
 
 ## License
 
