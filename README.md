@@ -6,15 +6,23 @@ A command line tool to count lines of code (CLOC), built with [Go](https://go.de
 ## Example
 <img width="508" alt="Screen Shot 2024-03-31 at 1 26 14 AM" src="https://github.com/ramirezfernando/cloc-tool/assets/91701930/4b188369-39d9-48b0-8fed-0d414b067e75">
 
-## Features
+## Table of Contents
+- [Features](#features)
+- [Installation](#installation)
+   - [macOS](#macos)
+   - [Linux](#linux)
+   - [Windows](#windows)
+- [Usage](#usage)
+- [License](#license)
+
+## Features <a name="features"></a>
 - cloc-tool has a huge range of languages, supporting over **220** language extensions.
 - cloc-tool is **accurate**, and **consistent** as it counts the number of newline characters `/n` present in a specified path. This ensures consistency across different platforms and text editors. Different text editors may interpret line endings differently (e.g., `\n` in Unix-like systems, `\r\n` in Windows), which could lead to discrepancies in line counts if you try to match the exact number of lines displayed in a specific editor.
 - Data presented in a visually appealing tabular form using the Bubbletea framework.
 
-## Installation
+## Installation <a name="installation"></a>
 
-### macOS
-
+### macOS <a name="macos"></a>
 1. Download the appropriate release archive for your platform from the [Releases](https://github.com/ramirezfernando/cloc-tool/releases/tag/v1.0.1) page:
    - For Intel-based Macs: [cloc-tool_1.0.1_darwin_amd64.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_darwin_amd64.tar.gz)
    - For Apple Silicon Macs: [cloc-tool_1.0.1_darwin_arm64.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_darwin_arm64.tar.gz)
@@ -32,7 +40,7 @@ A command line tool to count lines of code (CLOC), built with [Go](https://go.de
     $ cloc
     ```
 
-### Linux
+### Linux <a name="linux"></a>
 1. Download the appropriate release archive for your platform from the [Releases](https://github.com/ramirezfernando/cloc-tool/releases/tag/v1.0.1) page:
     - For 32-bit systems: [cloc-tool_1.0.1_linux_386.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_linux_386.tar.gz)
     - For 64-bit systems: [cloc-tool_1.0.1_linux_amd64.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_linux_amd64.tar.gz)
@@ -54,8 +62,7 @@ A command line tool to count lines of code (CLOC), built with [Go](https://go.de
     $ cloc
     ```
 
-### Windows
-
+### Windows <a name="windows"></a>
 1. Download the appropriate release archive for your platform from the [Releases](https://github.com/ramirezfernando/cloc-tool/releases/tag/v1.0.1) page:
     - For 32-bit systems: [cloc-tool_1.0.1_windows_386.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_windows_386.tar.gz)
     - For 64-bit systems: [cloc-tool_1.0.1_windows_amd64.tar.gz](https://github.com/ramirezfernando/cloc-tool/releases/download/v1.0.1/cloc-tool_1.0.1_windows_amd64.tar.gz)
@@ -67,12 +74,10 @@ A command line tool to count lines of code (CLOC), built with [Go](https://go.de
     $ cloc
     ```
 
-## Usage
-
+## Usage <a name="usage"></a>
 ```bash
 $ cloc ./your/path
 ```
 
-## License
-
+## License <a name="license"></a>
 This project is licensed under the [MIT License](LICENSE).
