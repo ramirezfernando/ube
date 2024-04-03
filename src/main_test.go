@@ -89,8 +89,8 @@ func TestGenerateTable(t *testing.T) {
 	}
 
 	expectedColumns := []table.Column{
-		{Title: "Language", Width: 15},
-		{Title: "Lines of Code", Width: 15},
+		{Title: "Language", Width: 16},
+		{Title: "Lines of Code", Width: 16},
 	}
 
 	expectedRows := []table.Row{
