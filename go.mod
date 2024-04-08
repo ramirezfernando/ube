@@ -4,7 +4,13 @@ go 1.20
 
 require github.com/charmbracelet/bubbletea v0.25.0
 
-require github.com/charmbracelet/lipgloss v0.9.1
+require github.com/charmbracelet/lipgloss v0.10.0
+
+require (
+	github.com/charmbracelet/log v0.4.0 // indirect
+	github.com/go-logfmt/logfmt v0.6.0 // indirect
+	golang.org/x/exp v0.0.0-20231006140011-7918f672742d // indirect
+)
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
@@ -18,9 +24,9 @@ require (
 	github.com/muesli/cancelreader v0.2.2 // indirect
 	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.15.2 // indirect
-	github.com/rivo/uniseg v0.4.6 // indirect
+	github.com/rivo/uniseg v0.4.7 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.12.0 // indirect
+	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/term v0.6.0 // indirect
 	golang.org/x/text v0.3.8 // indirect
 )

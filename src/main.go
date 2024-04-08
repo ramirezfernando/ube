@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"cloc-tool/src/language"
 	"cloc-tool/src/terminal"
-	"fmt"
 	"io"
 	"io/fs"
 	"os"
@@ -18,6 +17,7 @@ import (
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/log"
 )
 
 // LanguageLineCount is a map of programming languages to line count
@@ -26,7 +26,7 @@ type LanguageLineCount = map[string]int
 
 func main() {
 	if len(os.Args) < 2 {
-		fmt.Println("Usage: cloc <folder>")
+		log.Fatal(`Usage: cloc <folder>`)
 		os.Exit(1)
 	}
 
@@ -35,14 +35,14 @@ func main() {
 	m := terminal.Model{ExecutionTime: stopwatch.NewWithInterval(time.Millisecond), IsRunning: true}
 	p := tea.NewProgram(m)
 
+	// TODO: fix error when running `go run main.go cloc`: timer starts running even though it should return 'cloc: no such file or directory'
 	go func() {
 		msg := getMessage(path)
 		p.Send(msg)
 	}()
 
 	if _, err := p.Run(); err != nil {
-		fmt.Println("Error running program:", err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
 
 	os.Exit(0)
@@ -51,7 +51,7 @@ func main() {
 func getMessage(path string) tea.Msg {
 	llc, err := countLinesOfCode(path)
 	if err != nil {
-		fmt.Println("Error running program:", err)
+		log.Error(err)
 		return terminal.ClocCompleted{Err: err}
 	}
 
