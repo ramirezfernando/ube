@@ -11,11 +11,11 @@ import (
 )
 
 func TestGetMessage(t *testing.T) {
-	llc := map[string]int{
-		"Go":         4,
-		"OCaml":      28,
-		"Plain Text": 0,
-		"JavaScript": 24,
+	llc := map[string]languageDetails{
+		"Go":         {4, 1},
+		"OCaml":      {28, 1},
+		"Plain Text": {0, 1},
+		"JavaScript": {24, 1},
 	}
 
 	_, err := countLinesOfCode("../tests/data/nonexistent.txt")
@@ -41,14 +41,16 @@ func TestCountLinesOfCode(t *testing.T) {
 
 	tests := []struct {
 		path            string
-		expectedClocMap map[string]int
+		expectedClocMap map[string]languageDetails
 	}{
-		{"../tests/data/hello.go", map[string]int{"Go": 4}},
-		{"../tests/data/stack.ml", map[string]int{"OCaml": 28}},
-		{"../tests/data/empty.txt", map[string]int{"Plain Text": 0}},
-		{"../tests/data/person.js", map[string]int{"JavaScript": 24}},
-		{"../tests/data", map[string]int{"Go": 4, "OCaml": 28, "Plain Text": 0, "JavaScript": 24}}, // Directory
-		{"../tests/data/nonexistent.txt", map[string]int{}},                                        // Non-existent file
+		{"../tests/data/hello.go", map[string]languageDetails{"Go": {4, 1}}},
+		{"../tests/data/stack.ml", map[string]languageDetails{"OCaml": {28, 1}}},
+		{"../tests/data/empty.txt", map[string]languageDetails{"Plain Text": {0, 1}}},
+		{"../tests/data/person.js", map[string]languageDetails{"JavaScript": {24, 1}}},
+		{"../tests/data", map[string]languageDetails{"Go": {4, 1}, "OCaml": {28, 1}, "Plain Text": {0, 1}, "JavaScript": {24, 1}}}, // Directory
+		{"../tests/data/nonexistent.txt", map[string]languageDetails{}},                                                            // Non-existent file
+		{"../tests/data/unsupported.xyz", map[string]languageDetails{}},                                                            // Unsupported file extension
+
 	}
 
 	for _, tt := range tests {
@@ -82,23 +84,24 @@ func TestCountLinesOfFile(t *testing.T) {
 }
 
 func TestGenerateTable(t *testing.T) {
-	llc := map[string]int{
-		"Go":     100,
-		"Python": 200,
-		"Java":   150,
+	llc := map[string]languageDetails{
+		"Go":     {100, 1},
+		"Python": {200, 1},
+		"Java":   {150, 1},
 	}
 
 	expectedColumns := []table.Column{
 		{Title: "Language", Width: 16},
-		{Title: "Lines of Code", Width: 16},
+		{Title: "Lines", Width: 16},
+		{Title: "Files", Width: 10},
 	}
 
 	expectedRows := []table.Row{
-		{"Python", "200"},
-		{"Java", "150"},
-		{"Go", "100"},
-		{"", ""},
-		{"Total", "450"},
+		{"Python", "200", "1"},
+		{"Java", "150", "1"},
+		{"Go", "100", "1"},
+		{"", "", ""},
+		{"Total", "450", "3"},
 	}
 
 	expectedTable := table.New(

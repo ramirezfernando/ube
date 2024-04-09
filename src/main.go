@@ -21,6 +21,12 @@ import (
 	"github.com/charmbracelet/log"
 )
 
+type languageDetails struct {
+	// TODO: Change to uint
+	lines int
+	files int
+}
+
 func main() {
 	if len(os.Args) != 2 {
 		log.Fatal(`Usage: cloc <folder>`)
@@ -59,20 +65,20 @@ func getMessage(path string) tea.Msg {
 	return terminal.ClocCompleted{Table: t, Help: h}
 }
 
-func countLinesOfCode(path string) (map[string]int, error) {
+func countLinesOfCode(path string) (map[string]languageDetails, error) {
 	var wg sync.WaitGroup
 	var mu sync.Mutex
-	
-	lineCount := make(map[string]int)
+
+	lineCount := make(map[string]languageDetails)
 
 	err := filepath.WalkDir(path, func(currPath string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		if info.IsDir() || !info.Type().IsRegular(){
+		if info.IsDir() || !info.Type().IsRegular() {
 			return nil
 		}
-		language, exists := language.Exts[filepath.Ext(currPath)];
+		language, exists := language.Exts[filepath.Ext(currPath)]
 		if !exists {
 			return nil
 		}
@@ -83,12 +89,18 @@ func countLinesOfCode(path string) (map[string]int, error) {
 
 			lines, err := countLinesOfFile(currPath)
 			if err != nil {
-				log.Error("Error counting lines in %s: %v\n", currPath, err)
+				log.Error(err)
 				return
 			}
 
 			mu.Lock()
-			lineCount[language] += lines
+			ld, exists := lineCount[language]
+			if !exists {
+				ld = languageDetails{}
+			}
+			ld.lines += lines
+			ld.files++
+			lineCount[language] = ld
 			mu.Unlock()
 		}()
 
@@ -133,17 +145,20 @@ func countLinesOfFile(filePath string) (int, error) {
 	return count, err
 }
 
-func generateTable(lineCount map[string]int) table.Model {
+func generateTable(lineCount map[string]languageDetails) table.Model {
 	columns := []table.Column{
 		{Title: "Language", Width: 16},
-		{Title: "Lines of Code", Width: 16},
+		{Title: "Lines", Width: 16},
+		{Title: "Files", Width: 10},
 	}
 
 	rows := []table.Row{}
-	total := 0
-	for language, count := range lineCount {
-		rows = append(rows, table.Row{language, strconv.Itoa(count)})
-		total += count
+	lineTotal := 0
+	fileTotal := 0
+	for language, details := range lineCount {
+		rows = append(rows, table.Row{language, strconv.Itoa(details.lines), strconv.Itoa(details.files)})
+		lineTotal += details.lines
+		fileTotal += details.files
 	}
 	sort.Slice(rows, func(i, j int) bool {
 		li1, _ := strconv.Atoi(rows[i][1])
@@ -151,8 +166,8 @@ func generateTable(lineCount map[string]int) table.Model {
 		return li1 > li2
 	})
 
-	rows = append(rows, table.Row{"", ""})
-	rows = append(rows, table.Row{"Total", strconv.Itoa(total)})
+	rows = append(rows, table.Row{"", "", ""})
+	rows = append(rows, table.Row{"Total", strconv.Itoa(lineTotal), strconv.Itoa(fileTotal)})
 
 	t := table.New(
 		table.WithColumns(columns),

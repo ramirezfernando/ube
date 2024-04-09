@@ -40,7 +40,7 @@ var baseStyle = lipgloss.NewStyle().
 	BorderForeground(lipgloss.Color("240"))
 
 func (m Model) View() string {
-	out := m.ExecutionTime.View()
+	out := "Elapsed: " + m.ExecutionTime.View()
 
 	if !m.IsRunning {
 		out += "\n" + baseStyle.Render(m.Table.View())
