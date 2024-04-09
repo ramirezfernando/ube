@@ -25,8 +25,11 @@ import (
 type LanguageLineCount = map[string]int
 
 func main() {
-	if len(os.Args) < 2 {
+	if len(os.Args) != 2 {
 		log.Fatal(`Usage: cloc <folder>`)
+		os.Exit(1)
+	} else if _, err := os.Stat(os.Args[1]); os.IsNotExist(err) {
+		log.Fatal("cloc: no such file or directory")
 		os.Exit(1)
 	}
 
@@ -35,7 +38,6 @@ func main() {
 	m := terminal.Model{ExecutionTime: stopwatch.NewWithInterval(time.Millisecond), IsRunning: true}
 	p := tea.NewProgram(m)
 
-	// TODO: fix error when running `go run main.go cloc`: timer starts running even though it should return 'cloc: no such file or directory'
 	go func() {
 		msg := getMessage(path)
 		p.Send(msg)
@@ -60,15 +62,16 @@ func getMessage(path string) tea.Msg {
 	return terminal.ClocCompleted{Table: t, Help: h}
 }
 
+// TODO: Add Go routines to count lines of code concurrently
 func countLinesOfCode(path string) (LanguageLineCount, error) {
 	llc := make(LanguageLineCount)
-	err := filepath.WalkDir(path, func(path string, info fs.DirEntry, err error) error {
+	err := filepath.WalkDir(path, func(currPath string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
 		if !info.IsDir() && info.Type().IsRegular() {
-			if language, exists := language.Exts[filepath.Ext(path)]; exists {
-				lines, err := countLinesOfFile(path)
+			if language, exists := language.Exts[filepath.Ext(currPath)]; exists {
+				lines, err := countLinesOfFile(currPath)
 				if err != nil {
 					return err
 				}
