@@ -10,6 +10,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/charmbracelet/bubbles/help"
@@ -19,10 +20,6 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/charmbracelet/log"
 )
-
-// LanguageLineCount is a map of programming languages to line count
-// Example: { "Python": 100, "Go": 200 }
-type LanguageLineCount = map[string]int
 
 func main() {
 	if len(os.Args) != 2 {
@@ -62,29 +59,48 @@ func getMessage(path string) tea.Msg {
 	return terminal.ClocCompleted{Table: t, Help: h}
 }
 
-// TODO: Add Go routines to count lines of code concurrently
-func countLinesOfCode(path string) (LanguageLineCount, error) {
-	llc := make(LanguageLineCount)
+func countLinesOfCode(path string) (map[string]int, error) {
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	
+	lineCount := make(map[string]int)
+
 	err := filepath.WalkDir(path, func(currPath string, info fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		if !info.IsDir() && info.Type().IsRegular() {
-			if language, exists := language.Exts[filepath.Ext(currPath)]; exists {
-				lines, err := countLinesOfFile(currPath)
-				if err != nil {
-					return err
-				}
-				llc[language] += lines
-			}
+		if info.IsDir() || !info.Type().IsRegular(){
+			return nil
 		}
+		language, exists := language.Exts[filepath.Ext(currPath)];
+		if !exists {
+			return nil
+		}
+
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+
+			lines, err := countLinesOfFile(currPath)
+			if err != nil {
+				log.Error("Error counting lines in %s: %v\n", currPath, err)
+				return
+			}
+
+			mu.Lock()
+			lineCount[language] += lines
+			mu.Unlock()
+		}()
 
 		return nil
 	})
+
 	if err != nil {
-		return llc, err
+		return lineCount, err
 	}
-	return llc, nil
+
+	wg.Wait()
+	return lineCount, nil
 }
 
 // Counts the number of '\n' characters in a file
@@ -117,7 +133,7 @@ func countLinesOfFile(filePath string) (int, error) {
 	return count, err
 }
 
-func generateTable(llc LanguageLineCount) table.Model {
+func generateTable(lineCount map[string]int) table.Model {
 	columns := []table.Column{
 		{Title: "Language", Width: 16},
 		{Title: "Lines of Code", Width: 16},
@@ -125,9 +141,9 @@ func generateTable(llc LanguageLineCount) table.Model {
 
 	rows := []table.Row{}
 	total := 0
-	for language, lineCount := range llc {
-		rows = append(rows, table.Row{language, strconv.Itoa(lineCount)})
-		total += lineCount
+	for language, count := range lineCount {
+		rows = append(rows, table.Row{language, strconv.Itoa(count)})
+		total += count
 	}
 	sort.Slice(rows, func(i, j int) bool {
 		li1, _ := strconv.Atoi(rows[i][1])

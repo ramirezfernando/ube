@@ -11,7 +11,7 @@ import (
 )
 
 func TestGetMessage(t *testing.T) {
-	llc := LanguageLineCount{
+	llc := map[string]int{
 		"Go":         4,
 		"OCaml":      28,
 		"Plain Text": 0,
@@ -41,14 +41,14 @@ func TestCountLinesOfCode(t *testing.T) {
 
 	tests := []struct {
 		path            string
-		expectedClocMap LanguageLineCount
+		expectedClocMap map[string]int
 	}{
-		{"../tests/data/hello.go", LanguageLineCount{"Go": 4}},
-		{"../tests/data/stack.ml", LanguageLineCount{"OCaml": 28}},
-		{"../tests/data/empty.txt", LanguageLineCount{"Plain Text": 0}},
-		{"../tests/data/person.js", LanguageLineCount{"JavaScript": 24}},
-		{"../tests/data", LanguageLineCount{"Go": 4, "OCaml": 28, "Plain Text": 0, "JavaScript": 24}}, // Directory
-		{"../tests/data/nonexistent.txt", LanguageLineCount{}},                                        // Non-existent file
+		{"../tests/data/hello.go", map[string]int{"Go": 4}},
+		{"../tests/data/stack.ml", map[string]int{"OCaml": 28}},
+		{"../tests/data/empty.txt", map[string]int{"Plain Text": 0}},
+		{"../tests/data/person.js", map[string]int{"JavaScript": 24}},
+		{"../tests/data", map[string]int{"Go": 4, "OCaml": 28, "Plain Text": 0, "JavaScript": 24}}, // Directory
+		{"../tests/data/nonexistent.txt", map[string]int{}},                                        // Non-existent file
 	}
 
 	for _, tt := range tests {
@@ -82,7 +82,7 @@ func TestCountLinesOfFile(t *testing.T) {
 }
 
 func TestGenerateTable(t *testing.T) {
-	llc := LanguageLineCount{
+	llc := map[string]int{
 		"Go":     100,
 		"Python": 200,
 		"Java":   150,
