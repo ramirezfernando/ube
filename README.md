@@ -5,7 +5,6 @@
 
 A command line tool to count lines of code (CLOC), built with [Go](https://go.dev/) & [Bubbletea](https://github.com/charmbracelet/bubbletea).
 
-## Example
 <img width="508" alt="Screen Shot 2024-03-31 at 1 26 14 AM" src="https://github.com/ramirezfernando/cloc-tool/assets/91701930/4b188369-39d9-48b0-8fed-0d414b067e75">
 
 ## Table of Contents
@@ -15,6 +14,7 @@ A command line tool to count lines of code (CLOC), built with [Go](https://go.de
    - [Linux](#linux)
    - [Windows](#windows)
 - [Usage](#usage)
+- [Contributing](#contributing)
 - [License](#license)
 
 ## Features <a name="features"></a>
@@ -80,6 +80,9 @@ A command line tool to count lines of code (CLOC), built with [Go](https://go.de
 ```bash
 $ cloc ./your/path
 ```
+
+## Contributing <a name="contributing"></a>
+Contributions are welcome! Please check the [Contributing Guidelines](CONTRIBUTING.md) for a few helpful tips!
 
 ## License <a name="license"></a>
 This project is licensed under the [MIT License](LICENSE).
