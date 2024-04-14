@@ -1,11 +1,13 @@
 # Ube
+<img width="300" alt="Ube example" src="./images/ube-logo.png"/>
+
 ![Latest Release](https://img.shields.io/github/v/release/ramirezfernando/ube)
 ![Coverage](https://img.shields.io/badge/Coverage-82.0%25-brightgreen)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/ramirezfernando/ube/total)
 
 Ube (ooh-bay) is a program that displays statistics about your code. Ube will show the number of files, and total lines within those files grouped by language.
 
-<img width="600" alt="Ube example" src="./images/ube.png"/>
+<img width="600" alt="Ube example" src="./images/ube-example.png"/>
 
 ## Table of Contents
 - [Features](#features)
@@ -89,8 +91,6 @@ $ ube ./your/path
 ### “ube” can’t be opened because Apple cannot check it for malicious software.
 1. Naviagte to `Settings` > `Security & Privacy`.
 2. Under `General` tab, click "Allow Anyway" next to the message about the app being blocked.
-<img width="508" alt="allow anyway" src="./images/allow-anyway.png"/>
-
 
 ## Contributing <a name="contributing"></a>
 Contributions are welcome! Please check the [Contributing Guidelines](CONTRIBUTING.md) for a few helpful tips!
