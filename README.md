@@ -1,11 +1,11 @@
-# cloc-tool
+# Ube
 ![Latest Release](https://img.shields.io/github/v/release/ramirezfernando/cloc-tool)
 ![Coverage](https://img.shields.io/badge/Coverage-79.8%25-brightgreen)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/ramirezfernando/cloc-tool/total)
 
-A command line tool to count lines of code (CLOC), built with [Go](https://go.dev/) & [Bubbletea](https://github.com/charmbracelet/bubbletea).
+Ube (ooh-bay) is a program that displays statistics about your code. Ube will show the number of files, and total lines within those files grouped by language.
 
-<img width="508" alt="Screen Shot 2024-03-31 at 1 26 14 AM" src="https://github.com/ramirezfernando/cloc-tool/assets/91701930/4b188369-39d9-48b0-8fed-0d414b067e75">
+<img width="508" alt="Screen Shot 2024-03-31 at 1 26 14 AM" src="./images/ube.png"/>
 
 ## Table of Contents
 - [Features](#features)
@@ -18,9 +18,12 @@ A command line tool to count lines of code (CLOC), built with [Go](https://go.de
 - [License](#license)
 
 ## Features <a name="features"></a>
-- cloc-tool has a huge range of languages, supporting over **220** language extensions.
-- cloc-tool is **accurate**, and **consistent** as it counts the number of newline characters `/n` present in a specified path. This ensures consistency across different platforms and text editors. Different text editors may interpret line endings differently (e.g., `\n` in Unix-like systems, `\r\n` in Windows), which could lead to discrepancies in line counts if you try to match the exact number of lines displayed in a specific editor.
-- Data presented in a visually appealing tabular form using the Bubbletea framework.
+- Ube has a huge range of languages, supporting over **220** language extensions.
+- It's **accurate**, and **consistent** as it counts the number of newline characters `/n` present in a specified path. This ensures consistency across different platforms and text editors.
+- The code statistics are displayed in a **clean**, **easy-to-read** format leveraging the following libraries from [Charm](https://github.com/charmbracelet):
+    - [Bubble Tea](https://github.com/charmbracelet/bubbletea) - A powerful little TUI framework
+    - [Bubbles](https://github.com/charmbracelet/bubbles) - TUI components for Bubble Tea
+    - [Log](https://github.com/charmbracelet/log) - A minimal, colorful Go logging library
 
 ## Installation <a name="installation"></a>
 
