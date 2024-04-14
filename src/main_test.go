@@ -1,7 +1,7 @@
 package main
 
 import (
-	"cloc-tool/src/terminal"
+	"ube/src/terminal"
 	"reflect"
 	"testing"
 
@@ -128,4 +128,24 @@ func TestGenerateTable(t *testing.T) {
 	if !reflect.DeepEqual(expectedTable, actualTable) {
 		t.Errorf("Expected %v, but got %v", expectedTable, actualTable)
 	}
+}
+
+func TestFormatStringInteger(t *testing.T) {
+	tests := []struct {
+		number         string
+		expectedNumber string
+	}{
+		{"1234", "1,234"},
+		{"123456", "123,456"},
+		{"1234567", "1,234,567"},
+		{"0", "0"},
+	}
+	
+	for _, tt := range tests {
+		num := FormatStringInteger(tt.number)
+
+		if num != tt.expectedNumber {
+			t.Errorf("Expected %s lines, but got %s", tt.expectedNumber, num)
+		}
+	} 
 }

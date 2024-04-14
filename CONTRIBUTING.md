@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in contributing to cloc-tool!
+Thanks for your interest in contributing!
 
 ## Contributing issues
 

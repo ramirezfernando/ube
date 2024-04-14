@@ -2,8 +2,8 @@ package main
 
 import (
 	"bytes"
-	"cloc-tool/src/language"
-	"cloc-tool/src/terminal"
+	"ube/src/language"
+	"ube/src/terminal"
 	"io"
 	"io/fs"
 	"os"
@@ -22,17 +22,16 @@ import (
 )
 
 type languageDetails struct {
-	// TODO: Change to uint
 	lines int
 	files int
 }
 
 func main() {
 	if len(os.Args) != 2 {
-		log.Fatal(`Usage: cloc <folder>`)
+		log.Fatal(`Usage: ube <folder>`)
 		os.Exit(1)
 	} else if _, err := os.Stat(os.Args[1]); os.IsNotExist(err) {
-		log.Fatal("cloc: no such file or directory")
+		log.Fatal("ube: no such file or directory")
 		os.Exit(1)
 	}
 
@@ -160,14 +159,21 @@ func generateTable(lineCount map[string]languageDetails) table.Model {
 		lineTotal += details.lines
 		fileTotal += details.files
 	}
+
+	// Sort by lines of code
 	sort.Slice(rows, func(i, j int) bool {
 		li1, _ := strconv.Atoi(rows[i][1])
 		li2, _ := strconv.Atoi(rows[j][1])
 		return li1 > li2
 	})
 
+	for i, row := range rows {
+		rows[i][1] = FormatStringInteger(row[1])
+		rows[i][2] = FormatStringInteger(row[2])
+	}
+
 	rows = append(rows, table.Row{"", "", ""})
-	rows = append(rows, table.Row{"Total", strconv.Itoa(lineTotal), strconv.Itoa(fileTotal)})
+	rows = append(rows, table.Row{"Total", FormatStringInteger(strconv.Itoa(lineTotal)), FormatStringInteger(strconv.Itoa(fileTotal))})
 
 	t := table.New(
 		table.WithColumns(columns),
@@ -189,4 +195,20 @@ func generateTable(lineCount map[string]languageDetails) table.Model {
 	t.SetStyles(s)
 
 	return t
+}
+
+func FormatStringInteger(n string) string {
+	if len(n) < 4 {
+		return n
+	}
+
+	var formatted string
+	for i, r := range n {
+		if i != 0 && (len(n)-i)%3 == 0 {
+			formatted += ","
+		}
+		formatted += string(r)
+	}
+
+	return formatted
 }
