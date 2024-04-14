@@ -1,5 +1,5 @@
 # Ube
-<img width="300" alt="Ube example" src="./images/ube-logo.png"/>
+<img width="100%" alt="Ube banner" src="./images/ube-banner.png"/>
 
 ![Latest Release](https://img.shields.io/github/v/release/ramirezfernando/ube)
 ![Coverage](https://img.shields.io/badge/Coverage-82.0%25-brightgreen)
