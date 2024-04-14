@@ -1,6 +1,6 @@
 # Ube
 ![Latest Release](https://img.shields.io/github/v/release/ramirezfernando/cloc-tool)
-![Coverage](https://img.shields.io/badge/Coverage-79.8%25-brightgreen)
+![Coverage](https://img.shields.io/badge/Coverage-82.0%25-brightgreen)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/ramirezfernando/cloc-tool/total)
 
 Ube (ooh-bay) is a program that displays statistics about your code. Ube will show the number of files, and total lines within those files grouped by language.
