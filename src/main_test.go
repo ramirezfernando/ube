@@ -1,9 +1,9 @@
 package main
 
 import (
-	"ube/src/terminal"
 	"reflect"
 	"testing"
+	"ube/src/terminal"
 
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/table"
@@ -22,10 +22,10 @@ func TestGetMessage(t *testing.T) {
 
 	tests := []struct {
 		path            string
-		expectedMessage terminal.ClocCompleted
+		expectedMessage terminal.CompletionResult
 	}{
-		{"../tests/data", terminal.ClocCompleted{Table: generateTable(llc), Help: help.New()}},
-		{"../tests/data/nonexistent.txt", terminal.ClocCompleted{Err: err}}, // Non-existent file
+		{"../tests/data", terminal.CompletionResult{Table: generateTable(llc), Help: help.New()}},
+		{"../tests/data/nonexistent.txt", terminal.CompletionResult{Err: err}}, // Non-existent file
 
 	}
 
@@ -140,12 +140,12 @@ func TestFormatStringInteger(t *testing.T) {
 		{"1234567", "1,234,567"},
 		{"0", "0"},
 	}
-	
+
 	for _, tt := range tests {
 		num := FormatStringInteger(tt.number)
 
 		if num != tt.expectedNumber {
 			t.Errorf("Expected %s lines, but got %s", tt.expectedNumber, num)
 		}
-	} 
+	}
 }

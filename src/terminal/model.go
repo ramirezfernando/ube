@@ -7,8 +7,8 @@ import (
 )
 
 type Model struct {
-	ExecutionTime stopwatch.Model
-	IsRunning     bool
-	Table         table.Model
-	Help          help.Model
+	ElapsedTime stopwatch.Model
+	IsRunning   bool
+	Table       table.Model
+	Help        help.Model
 }

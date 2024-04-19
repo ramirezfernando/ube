@@ -6,7 +6,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type ClocCompleted struct {
+type CompletionResult struct {
 	Table table.Model
 	Help  help.Model
 	Err   error
@@ -15,18 +15,18 @@ type ClocCompleted struct {
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 	switch msg := msg.(type) {
-	case ClocCompleted:
+	case CompletionResult:
 		if msg.Err != nil {
 			return m, tea.Quit
 		}
-		m.ExecutionTime.Stop()
+		m.ElapsedTime.Stop()
 		m.IsRunning = false
 		m.Table = msg.Table
 		m.Help = msg.Help
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q", "ctrl+c":
-			m.ExecutionTime.Stop()
+			m.ElapsedTime.Stop()
 			return m, tea.Quit
 		case "u", "up":
 			m.Table.MoveUp(1)
@@ -35,9 +35,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
-	// The stopwatch and table should only update if the CLOC program is running
 	if m.IsRunning {
-		m.ExecutionTime, cmd = m.ExecutionTime.Update(msg)
+		m.ElapsedTime, cmd = m.ElapsedTime.Update(msg)
 		m.Table, _ = m.Table.Update(msg)
 	}
 

@@ -2,8 +2,6 @@ package main
 
 import (
 	"bytes"
-	"ube/src/language"
-	"ube/src/terminal"
 	"io"
 	"io/fs"
 	"os"
@@ -12,6 +10,8 @@ import (
 	"strconv"
 	"sync"
 	"time"
+	"ube/src/language"
+	"ube/src/terminal"
 
 	"github.com/charmbracelet/bubbles/help"
 	"github.com/charmbracelet/bubbles/stopwatch"
@@ -37,7 +37,7 @@ func main() {
 
 	path := os.Args[1]
 
-	m := terminal.Model{ExecutionTime: stopwatch.NewWithInterval(time.Millisecond), IsRunning: true}
+	m := terminal.Model{ElapsedTime: stopwatch.NewWithInterval(time.Millisecond), IsRunning: true}
 	p := tea.NewProgram(m)
 
 	go func() {
@@ -53,15 +53,35 @@ func main() {
 }
 
 func getMessage(path string) tea.Msg {
-	llc, err := countLinesOfCode(path)
+	stats, err := countLinesOfCode(path)
 	if err != nil {
 		log.Error(err)
-		return terminal.ClocCompleted{Err: err}
+		return terminal.CompletionResult{Err: err}
 	}
 
-	t := generateTable(llc)
+	t := generateTable(stats)
 	h := help.New()
-	return terminal.ClocCompleted{Table: t, Help: h}
+	return terminal.CompletionResult{Table: t, Help: h}
+}
+
+func isValidFile(fileName string, info fs.DirEntry) bool {
+	if info.IsDir() || !info.Type().IsRegular() {
+		return false
+	}
+	_, exists := getLanguageName(fileName)
+	return exists
+}
+
+func getLanguageName(fileName string) (string, bool) {
+	language, exists := language.Exts[getLanguageExtension(fileName)]
+	if !exists {
+		return "", false
+	}
+	return language, true
+}
+
+func getLanguageExtension(fileName string) string {
+	return filepath.Ext(fileName)
 }
 
 func countLinesOfCode(path string) (map[string]languageDetails, error) {
@@ -74,13 +94,10 @@ func countLinesOfCode(path string) (map[string]languageDetails, error) {
 		if err != nil {
 			return err
 		}
-		if info.IsDir() || !info.Type().IsRegular() {
+		if !isValidFile(currPath, info) {
 			return nil
 		}
-		language, exists := language.Exts[filepath.Ext(currPath)]
-		if !exists {
-			return nil
-		}
+		language, _ := getLanguageName(currPath)
 
 		wg.Add(1)
 		go func() {
@@ -114,7 +131,6 @@ func countLinesOfCode(path string) (map[string]languageDetails, error) {
 	return lineCount, nil
 }
 
-// Counts the number of '\n' characters in a file
 func countLinesOfFile(filePath string) (int, error) {
 	file, err := os.OpenFile(filePath, os.O_RDONLY, 0444)
 	if err != nil {
