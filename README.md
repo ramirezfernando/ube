@@ -2,7 +2,7 @@
 <img width="100%" alt="Ube banner" src="./images/ube-banner.png"/>
 
 [![Latest Release](https://img.shields.io/github/v/release/ramirezfernando/ube)](https://github.com/ramirezfernando/ube/releases/tag/v2.0.0)
-![Coverage](https://img.shields.io/badge/Coverage-82.0%25-brightgreen)
+![Coverage](https://img.shields.io/badge/Coverage-83.2%25-brightgreen)
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/ramirezfernando/ube/total)
 ![GitHub License](https://img.shields.io/github/license/ramirezfernando/ube)
 
