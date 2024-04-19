@@ -24,9 +24,10 @@ Ube (ooh-bay) is a program that displays statistics about your code. Ube will sh
 ## Features <a name="features"></a>
 - Ube has a huge range of languages, supporting over **220** language extensions.
 - It's **accurate**, and **consistent** as it counts the number of newline characters `/n` present in a specified path. This ensures consistency across different platforms and text editors.
-- The code statistics are displayed in a **clean**, **easy-to-read** format leveraging the following libraries from [Charm](https://github.com/charmbracelet):
+- The code statistics are displayed in a **clean**, **easy-to-read** format leveraging the following libraries:
     - [Bubble Tea](https://github.com/charmbracelet/bubbletea) - A powerful little TUI framework
     - [Bubbles](https://github.com/charmbracelet/bubbles) - TUI components for Bubble Tea
+    - [Lip Gloss](https://github.com/charmbracelet/lipgloss) - Style definitions for Bubble Tea
     - [Log](https://github.com/charmbracelet/log) - A minimal, colorful Go logging library
 
 ## Installation <a name="installation"></a>
