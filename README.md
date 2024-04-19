@@ -10,6 +10,10 @@ Ube (ooh-bay) is a program that displays statistics about your code. Ube will sh
 
 <img width="600" alt="Ube example" src="./images/ube-example.png"/>
 
+## Example
+![ube-example](https://github.com/ramirezfernando/ube/assets/91701930/ce2dba7d-a283-4729-9e42-084426185828)
+
+
 ## Table of Contents
 - [Features](#features)
 - [Installation](#installation)
